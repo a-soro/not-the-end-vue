@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, type Ref } from 'vue';
   import Header from './components/Header.vue';
 
   enum NtETokenType {
@@ -9,17 +9,26 @@
 
   const minValue: number = 1;
   const maxValue: number = 50;
+  const _maxDrawableTokens: number = 4;
 
-  const isAdrenalinChecked: boolean = ref(false);
-  const isConfusionChecked: boolean = ref(false);
+  const isAdrenalinChecked: Ref<boolean, boolean> = ref(false);
+  const isConfusionChecked: Ref<boolean, boolean> = ref(false);
 
-  const posValue: number = ref(0);
-  const negValue: number = ref(0);
+  const posValue: Ref<number, number> = ref(0);
+  const negValue: Ref<number, number> = ref(0);
 
-  const tokensToDraw: number = ref(1);
+  const tokensToDraw: Ref<number, number> = ref(1);
 
   function tokTot() {
     return posValue.value + negValue.value;
+  }
+
+  function forceFocus(event: any) {
+    event.target?.select();
+  }
+
+  function maxDrawableTokens() {
+    return Math.min(tokTot(), _maxDrawableTokens);
   }
 
   function incrTokensToDraw() {
@@ -73,19 +82,20 @@
           <b v-if="isConfusionChecked" class="rnd-tokens">Casuali</b>
           <b v-else class="pos-tokens">Positivi</b>
         </p>
-        <input v-model.number="posValue" type="number" id="posValueInput" placeholder="es: 1" min="{{minValue}}" max="{{maxValue}}" @focus="$event.target.select()" />
+        <input v-model.number="posValue" type="number" id="posValueInput" placeholder="es: 1" min="{{minValue}}" max="{{maxValue}}" @focus="forceFocus($event)" />
       </div>
       
       <div class="token-selection">
         <p>Token <b class="neg-tokens">Negativi</b></p>
-        <input v-model.number="negValue" type="number" id="negValueInput" placeholder="es: 1" min="{{minValue}}" max="{{maxValue}}" @focus="$event.target.select()" />
+        <input v-model.number="negValue" type="number" id="negValueInput" placeholder="es: 1" min="{{minValue}}" max="{{maxValue}}" @focus="forceFocus($event)" />
       </div>
     </div>
 
     <div class="middle">
       <button type="button" class="edit-tokens-to-draw" @click="incrTokensToDraw" :disabled="tokensToDraw >= tokTot()">+</button>
 
-      <p v-if="tokTot()" class="tokens-to-draw">{{ tokensToDraw }}</p>
+      <p v-if="isAdrenalinChecked && tokTot()" class="tokens-to-draw with-adrenalin">{{ maxDrawableTokens() }}</p>
+      <p v-else-if="tokTot()" class="tokens-to-draw">{{ tokensToDraw }}</p>
       <p v-else class="no-tokens-to-draw">Aggiungi dei token</p>
 
       <button type="button" class="edit-tokens-to-draw" @click="decrTokensToDraw" :disabled="tokensToDraw <= minValue || tokensToDraw == 1">-</button>
@@ -169,6 +179,10 @@
   .tokens-to-draw {
     font-size: 4em;
     text-align: center;
+
+    &.with-adrenalin {
+      color: red;
+    }
   }
 
   .no-tokens-to-draw {
