@@ -10,6 +10,7 @@ export default defineConfig({
     vue(),
     // vueDevTools(), /** vite-plugin-vue-devtools */
   ],
+  base: '/not-the-end-vue',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
