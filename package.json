@@ -1,7 +1,7 @@
 {
   "name": "not-the-end-vue",
   "homepage": "https://a-soro.github.io/not-the-end-vue/",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
