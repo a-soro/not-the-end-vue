@@ -137,7 +137,7 @@
     justify-content: space-between;
 
     width: 100%;    
-    padding: 8px;
+    padding: 8px 16px;
   }
 
   .status-selection {
