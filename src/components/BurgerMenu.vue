@@ -58,6 +58,7 @@
     bottom: 0;
     left: 0;
     width: calc(100lvw - 50px);
+    max-width: 400px;
 
     padding: 20px;
 
