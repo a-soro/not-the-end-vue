@@ -1,10 +1,13 @@
 <script setup lang="ts">
   import { ref, type Ref } from 'vue';
   import pkg from '../../package.json';
+  import { useLocalStorage } from '@vueuse/core';
 
   const appVersion = pkg.version;
 
   const isActive: Ref<boolean, boolean> = ref(false);
+
+  const maxTokens = useLocalStorage('NtE__maxTokens', 4, { mergeDefaults: true });
 
   function burgerClick() {
     isActive.value = !isActive.value;
@@ -22,7 +25,12 @@
 
   <div :class="{'side-menu': true, 'open': isActive}">
     <div class="options">
+      <p><b>Opzioni</b></p>
 
+      <div class="option">
+        <label for="maxTokensInput" style="margin-right: 12px;">Max tokens: </label>
+        <input type="number" id="maxTokensInput" placeholder="es: 4" min="4" max="10" v-model.number="maxTokens" />
+      </div>
     </div>
 
     <div class="info">
@@ -84,6 +92,10 @@
   .side-menu .app-version {
     text-align: right;
     margin-top: 12px;
+  }
+
+  .side-menu .options .option {
+    margin-left: 20px;
   }
 
   /** styles and animations from https://stackblitz.com/edit/angular-burger-menu */

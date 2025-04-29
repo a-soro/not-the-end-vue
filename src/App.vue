@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { ref, type Ref } from 'vue';
+  import { useLocalStorage } from '@vueuse/core';
   import Header from './components/Header.vue';
 
   enum NtETokenType {
@@ -9,7 +10,7 @@
 
   const minValue: number = 1;
   const maxValue: number = 50;
-  const _maxDrawableTokens: number = 4;
+  const _maxDrawableTokens = useLocalStorage('NtE__maxTokens', 4, { mergeDefaults: true });
 
   const isAdrenalinChecked: Ref<boolean, boolean> = ref(false);
   const isConfusionChecked: Ref<boolean, boolean> = ref(false);
@@ -27,13 +28,14 @@
     event.target?.select();
   }
 
-  function maxDrawableTokens() {
-    return Math.min(tokTot(), _maxDrawableTokens);
+  function maxDrawableTokens(): number {
+    return Math.min(tokTot(), _maxDrawableTokens.value);
   }
 
   function incrTokensToDraw() {
+    console.log(maxDrawableTokens());
     if (!posValue.value || !negValue.value) return;
-    // if (tokensToDraw == (appOptions.maxTokens)) return;
+    if (tokensToDraw.value == _maxDrawableTokens.value) return;
     if (tokensToDraw.value < tokTot()) {
       tokensToDraw.value++;
     }
@@ -92,7 +94,7 @@
     </div>
 
     <div class="middle">
-      <button type="button" class="edit-tokens-to-draw" @click="incrTokensToDraw" :disabled="tokensToDraw >= tokTot()">+</button>
+      <button type="button" class="edit-tokens-to-draw" @click="incrTokensToDraw" :disabled="tokensToDraw >= maxDrawableTokens()">+</button>
 
       <p v-if="isAdrenalinChecked && tokTot()" class="tokens-to-draw with-adrenalin">{{ maxDrawableTokens() }}</p>
       <p v-else-if="tokTot()" class="tokens-to-draw">{{ tokensToDraw }}</p>
