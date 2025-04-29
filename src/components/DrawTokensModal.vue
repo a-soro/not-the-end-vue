@@ -54,6 +54,21 @@
   }
 
 
+  const showBagIcon: Ref<boolean, boolean> = ref(false);
+  const showBagContent: Ref<boolean, boolean> = ref(false);
+  function clickOnBag() {
+    if (!showBagIcon.value) showBagIcon.value = true;
+    else if (showBagContent.value) {
+      showBagContent.value = false;
+      showBagIcon.value = false;
+
+      collection.sort(() => (Math.random() > .5) ? 1 : -1);
+    } else {
+      showBagContent.value = true;
+    }
+  }
+
+
   function init() {
     if ((collection ?? []).length == tokensToDraw) hasRiskedAlready = true;
     collection.sort(() => (Math.random() > .5) ? 1 : -1);
@@ -92,6 +107,15 @@
       <CloseIcon></CloseIcon>
     </div>
 
+    <div :class="{'bag-icon': true, 'active': showBagIcon}" @click="clickOnBag()">
+      <img src="../../public/nte_bag.png" alt="nte_bag" v-if="showBagIcon">
+    </div>
+    <div class="bag-content" v-if="showBagContent">
+        <div class="hexagon-container" v-for="token in collection" :class="{'hexagon-container--pos': token == NtETokenType.Positive, 'hexagon-container--neg': token == NtETokenType.Negative}">
+          <div class="hexagon" :class="{'hexagon-pos': token == NtETokenType.Positive, 'hexagon-neg': token == NtETokenType.Negative}"></div>
+        </div>
+    </div>
+
     <div class="hexagon-container hexagon-container--pos">
       <div class="hexagon hexagon-pos"></div>
       <div class="hex-label">
@@ -106,7 +130,7 @@
         Token Positivi
       </p>
 
-      <button type="button" class="risk-btn" @click="risk()" :disabled="hasRiskedAlready || emptyBag || maxRiskTokensReached">
+      <button type="button" class="risk-btn" @click="risk()" :disabled="hasRiskedAlready || emptyBag || maxRiskTokensReached || showBagContent">
         rischia
       </button>
       
@@ -265,5 +289,66 @@
     text-transform: uppercase;
     font-size: 1em;
     letter-spacing: 0.1em;
+  }
+
+
+  
+
+  .bag-icon {
+    position: fixed;
+    bottom: 8px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+
+    padding: 8px;
+    border-radius: 50%;
+  }
+  
+  .bag-icon.active {
+    background-color: black;
+  }
+
+  .bag-icon img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .bag-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    position: fixed;
+    top: 60px;
+    bottom: 60px;
+    right: 60px;
+    left: 60px;
+    padding-top: 6px;
+    padding-right: 20px;
+    padding-bottom: 12px;
+    padding-left: 6px;
+
+    border-radius: 30px;
+
+    background-color: black;
+    z-index: 99999;
+    
+
+    overflow-y: scroll;
+  }
+  
+  .bag-content .hexagon-container {
+    width: 40px;
+    height: 40px;
+    transform: scale3d(0.1, 0.1, 1);
+    padding: 0;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .bag-content .hexagon-container .hexagon {
+    margin: 0;
   }
 </style>
