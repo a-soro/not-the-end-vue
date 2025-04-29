@@ -35,9 +35,9 @@
 
     <div class="info">
       <p>
-        <b>"Not the End"</b> è un gioco di ruolo creato da Claudio Pustorino ed edito da Fumble GdR; puoi trovarlo al link:
-        <a href="https://www.fumblegdr.it/products/not-the-end-manuale-base" target="_blank">
-          https://www.fumblegdr.it/products/not-the-end-manuale-base
+        <b>"Not the End"</b> è un gioco di ruolo creato da Claudio Pustorino ed edito da MS Edizioni; puoi trovarlo al link:
+        <a href="https://www.msedizioni.it/prodotto/not-the-end/" target="_blank">
+          https://www.msedizioni.it/prodotto/not-the-end/
         </a>
       </p>
       <p class="app-version">v{{ appVersion }}</p>
