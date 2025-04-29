@@ -2,6 +2,7 @@
   import { ref, type Ref } from 'vue';
   import { useLocalStorage } from '@vueuse/core';
   import Header from './components/Header.vue';
+  import DrawTokensModal from './components/DrawTokensModal.vue';
 
   enum NtETokenType {
     Positive = 1,
@@ -20,6 +21,8 @@
 
   const tokensToDraw: Ref<number, number> = ref(1);
 
+  const isModalOpen: Ref<boolean, boolean> = ref(false);
+
   function tokTot() {
     return posValue.value + negValue.value;
   }
@@ -33,7 +36,7 @@
   }
 
   function incrTokensToDraw() {
-    console.log(maxDrawableTokens());
+    // console.log(maxDrawableTokens());
     if (!posValue.value || !negValue.value) return;
     if (tokensToDraw.value == _maxDrawableTokens.value) return;
     if (tokensToDraw.value < tokTot()) {
@@ -52,9 +55,22 @@
     // console.log(tokensToDraw.value);
   }
 
+  const collection: NtETokenType[] = [];
   function drawTokens() {
-    console.log(isAdrenalinChecked.value, isConfusionChecked.value, "drawTokens", posValue.value, negValue.value);
-    console.log(tokensToDraw.value);
+    updateTokens();
+
+    isModalOpen.value = true;
+  }
+
+  function updateTokens() {
+    /** Clear collection */
+    collection.splice(0, collection.length);
+
+    /** Update collection */
+    for (let i = 0; i < posValue.value; i++) collection.push(NtETokenType.Positive);
+    for (let i = 0; i < negValue.value; i++) collection.push(NtETokenType.Negative);
+
+    // console.log(collection);
   }
 </script>
 
@@ -107,6 +123,18 @@
       <button type="button" class="draw-tokens" @click="drawTokens" :disabled="tokensToDraw < minValue || !posValue || !negValue">estrai</button>
     </div>
   </main>
+
+  <Teleport to="#full-modal-container">
+    <DrawTokensModal
+      v-if="isModalOpen"
+      @close-modal="isModalOpen = false;"
+
+      :collection="collection"
+      :tokensToDraw="tokensToDraw.valueOf()"
+      :isAdrenalinChecked="isAdrenalinChecked.valueOf()"
+      :isConfusionChecked="isConfusionChecked.valueOf()"
+    ></DrawTokensModal>
+  </Teleport>
 </template>
 
 <style scoped>
