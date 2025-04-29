@@ -54,6 +54,11 @@
   }
 
 
+  function getRemainingTokens(type: number) {
+    return collection.filter(tkn => tkn == type).length;
+  }
+
+
   const showBagIcon: Ref<boolean, boolean> = ref(false);
   const showBagContent: Ref<boolean, boolean> = ref(false);
   function clickOnBag() {
@@ -110,11 +115,6 @@
     <div :class="{'bag-icon': true, 'active': showBagIcon}" @click="clickOnBag()">
       <img src="../../public/nte_bag.png" alt="nte_bag" v-if="showBagIcon">
     </div>
-    <div class="bag-content" v-if="showBagContent">
-        <div class="hexagon-container" v-for="token in collection" :class="{'hexagon-container--pos': token == NtETokenType.Positive, 'hexagon-container--neg': token == NtETokenType.Negative}">
-          <div class="hexagon" :class="{'hexagon-pos': token == NtETokenType.Positive, 'hexagon-neg': token == NtETokenType.Negative}"></div>
-        </div>
-    </div>
 
     <div class="hexagon-container hexagon-container--pos">
       <div class="hexagon hexagon-pos"></div>
@@ -130,9 +130,26 @@
         Token Positivi
       </p>
 
-      <button type="button" class="risk-btn" @click="risk()" :disabled="hasRiskedAlready || emptyBag || maxRiskTokensReached || showBagContent">
+      <button type="button" class="risk-btn" @click="risk()" :disabled="hasRiskedAlready || emptyBag || maxRiskTokensReached" v-if="!showBagContent">
         rischia
       </button>
+      <div class="bag-content" v-if="showBagContent">
+        <p class="bag-content--label-pos">
+          altri {{ getRemainingTokens(NtETokenType.Positive) }} x
+        </p>
+        <div class="hexagon-container hexagon-container--pos">
+          <div class="hexagon hexagon-pos"></div>
+        </div>
+
+        <div style="width: 20%;"></div>
+
+        <p class="bag-content--label-neg">
+          altri {{ getRemainingTokens(NtETokenType.Negative) }} x
+        </p>
+        <div class="hexagon-container hexagon-container--neg">
+          <div class="hexagon hexagon-neg"></div>
+        </div>
+      </div>
       
       <p class="neg-tokens centered">
         Token Negativi
@@ -320,23 +337,7 @@
     flex-wrap: wrap;
     justify-content: center;
 
-    position: fixed;
-    top: 60px;
-    bottom: 60px;
-    right: 60px;
-    left: 60px;
-    padding-top: 6px;
-    padding-right: 20px;
-    padding-bottom: 12px;
-    padding-left: 6px;
-
-    border-radius: 30px;
-
-    background-color: black;
-    z-index: 99999;
-    
-
-    overflow-y: scroll;
+    height: 40px;
   }
   
   .bag-content .hexagon-container {
@@ -350,5 +351,10 @@
 
   .bag-content .hexagon-container .hexagon {
     margin: 0;
+  }
+
+  .bag-content--label-pos,
+  .bag-content--label-neg {
+    transform: translate3d(10px, 10px, 0);
   }
 </style>
