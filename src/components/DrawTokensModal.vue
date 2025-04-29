@@ -107,7 +107,7 @@
       </p>
 
       <button type="button" class="risk-btn" @click="risk()" :disabled="hasRiskedAlready || emptyBag || maxRiskTokensReached">
-        rischia ({{_maxDrawableTokens - tokensToDraw}})
+        rischia
       </button>
       
       <p class="neg-tokens centered">

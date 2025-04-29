@@ -16,15 +16,15 @@
   const isAdrenalinChecked: Ref<boolean, boolean> = ref(false);
   const isConfusionChecked: Ref<boolean, boolean> = ref(false);
 
-  const posValue: Ref<number, number> = ref(0);
-  const negValue: Ref<number, number> = ref(0);
+  const posValue: Ref<number | undefined, number | undefined> = ref(undefined);
+  const negValue: Ref<number | undefined, number | undefined> = ref(undefined);
 
   const tokensToDraw: Ref<number, number> = ref(1);
 
   const isModalOpen: Ref<boolean, boolean> = ref(false);
 
   function tokTot() {
-    return posValue.value + negValue.value;
+    return (posValue?.value ?? 0) + (negValue?.value ?? 0);
   }
 
   function forceFocus(event: any) {
@@ -37,7 +37,7 @@
 
   function incrTokensToDraw() {
     // console.log(maxDrawableTokens());
-    if (!posValue.value || !negValue.value) return;
+    if (!posValue?.value || !negValue?.value) return;
     if (tokensToDraw.value == _maxDrawableTokens.value) return;
     if (tokensToDraw.value < tokTot()) {
       tokensToDraw.value++;
@@ -67,8 +67,8 @@
     collection.splice(0, collection.length);
 
     /** Update collection */
-    for (let i = 0; i < posValue.value; i++) collection.push(NtETokenType.Positive);
-    for (let i = 0; i < negValue.value; i++) collection.push(NtETokenType.Negative);
+    for (let i = 0; i < (posValue?.value ?? 0); i++) collection.push(NtETokenType.Positive);
+    for (let i = 0; i < (negValue?.value ?? 0); i++) collection.push(NtETokenType.Negative);
 
     // console.log(collection);
   }
@@ -144,7 +144,6 @@
 
   main {
     margin: 0 auto;
-    padding-top: 20px;
     height: calc(100lvh - 52px);
     max-width: 600px;
     width: 100lvw;
@@ -158,6 +157,13 @@
   .top,
   .bottom {
     width: 100%;
+  }
+
+  .top {
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    background-color: rgba(102, 102, 102, 0.1);
   }
 
   .status-list,
@@ -198,7 +204,9 @@
   .middle {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    flex-grow: 1;
 
     width: fit-content;
     min-width: 100px;
