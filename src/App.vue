@@ -144,7 +144,7 @@
 
   main {
     margin: 0 auto;
-    height: calc(100lvh - 52px);
+    height: calc(100dvh - 52px);
     max-width: 600px;
     width: 100lvw;
 
