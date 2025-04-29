@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+# abort on errors (exit the script if any statement returns a non-true return value)
 set -e
 
 # build
