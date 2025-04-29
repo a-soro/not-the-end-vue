@@ -81,10 +81,10 @@
     // if (isAdrenalinChecked) tokensToDraw = _maxDrawableTokens.value;
     if (isConfusionChecked) {
       // console.log("prima", collection);
-      collection.forEach(tkn => {
+      collection.forEach((tkn: number, index: number) => {
         if (tkn == NtETokenType.Positive) {
           if (((Math.random() > .5) ? 1 : -1) < 0) {
-            tkn = NtETokenType.Negative;
+            collection[index] = NtETokenType.Negative;
             // console.log("r");
           } else {
             // console.log("p");
