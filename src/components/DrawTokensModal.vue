@@ -8,6 +8,8 @@
     Negative = 0
   }
 
+  const RISK_EXTRA_TOKENS = 1;
+
   const _maxDrawableTokens = useLocalStorage('NtE__maxTokens', 4, { mergeDefaults: true });
 
   /** inputs - start */
@@ -48,7 +50,10 @@
   let hasRiskedAlready: boolean = false;
   function risk() {
     hasRiskedAlready = true;
-    for (let i = 0; i < _maxDrawableTokens.value - tokensToDraw; i++) {
+
+    const n = isAdrenalinChecked ? _maxDrawableTokens.value : tokensToDraw;
+    
+    for (let i = 0; i < _maxDrawableTokens.value - n + RISK_EXTRA_TOKENS; i++) {
       draw();
     }
   }
